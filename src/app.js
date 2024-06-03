@@ -16,7 +16,7 @@ app.use(cookieParser())
 
 
 //routes
-import userRouter from './controllers/user.controller.js'
+import userRouter from './routes/user.routes.js'
 
 //routes declaration
 app.use("/api/v1/users",userRouter)   //Instead of ".get" we use ".use" when routes are imported

@@ -1,7 +1,6 @@
 import {v2 as cloudinary} from "cloudinary";
 import fs from "fs" // fs: file-system (R/w/open directory...)
 
-import {v2 as cloudinary} from 'cloudinary';
 
 
 
