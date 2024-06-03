@@ -35,7 +35,7 @@ const registerUser = asyncHandler(async (req, res)=>{
     }
 
 
-    const existeduser = User.findOne({                //Existed user is present or not
+    const existeduser = await User.findOne({                //Existed user is present or not
         $or: [{username},{email}]
     })
 
@@ -43,15 +43,20 @@ const registerUser = asyncHandler(async (req, res)=>{
         throw new ApiError(409,"User already exist !!")
     }
 
-    const avatar_localpath = req.files?.avatar[0]?.path;   // storing image local path {?:maybe present or not} {[0]:first property (store path)}
-    const cover_localpath = req.files?.coverImage[0]?.path;
+    const avatarLocalPath = req.files?.avatar[0]?.path;
+    //const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
-    if(!avatar_localpath){
+    let coverImageLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
+
+    if(!avatarLocalPath){
         throw new ApiError(400, "Avatar is required")
     }
 
-    const avatar = await uploadOnCloudinary(avatar_localpath) // upload on cloudinary
-    const coverImage = await uploadOnCloudinary(cover_localpath)
+    const avatar = await uploadOnCloudinary(avatarLocalPath) // upload on cloudinary
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
     if(!avatar){
         throw new ApiError(400, "Avatar is required")
@@ -75,10 +80,10 @@ const registerUser = asyncHandler(async (req, res)=>{
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User Registered Sucessfully...")
+        new ApiResponse(200, createdUser, "User registered Successfully")
     )
 
     
-})
+});
 
 export {registerUser}

@@ -5,18 +5,18 @@ import {upload} from "../middlewares/multer.middleware.js" //For file handling i
 const router= Router()
 
 router.route("/register").post(
-    upload.fields(               //Middleware to handle files 
-                                 // json-form data don't need any middleware
+    upload.fields([
         {
-            name:"avatar",
-            maxCount:1
-        },
+            name: "avatar",
+            maxCount: 1
+        }, 
         {
-            name:"coverImage",
-            maxCount:1
+            name: "coverImage",
+            maxCount: 1
         }
-    ),
-    registerUser);//https:localhost:8000/api/v1/users/register
+    ]),
+    registerUser
+    )//https:localhost:8000/api/v1/users/register
 
 export default router;
 
