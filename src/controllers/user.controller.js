@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.models.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
-
+import jwt from "jsonwebtoken"
 
 const generateAccessAndRefreshToken = async(userId)=>{
     try {
@@ -113,11 +113,6 @@ const loginUser = asyncHandler(async (req, res) =>{
         throw new ApiError(400, "username or email is required")
     }
     
-    // Here is an alternative of above code based on logic discussed in video:
-    // if (!(username || email)) {
-    //     throw new ApiError(400, "username or email is required")
-        
-    // }
 
     const user = await User.findOne({
         $or: [{username}, {email}]
@@ -161,7 +156,7 @@ const loginUser = asyncHandler(async (req, res) =>{
 
 
 const logoutUser = asyncHandler(async(req, res) => {
-    await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(           // User will get access through refresh token using auth middleware
         req.user._id,
         {
             $unset: {
@@ -185,10 +180,56 @@ const logoutUser = asyncHandler(async(req, res) => {
     .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
+const refreshAccessToken = asyncHandler(async(req,res)=>{ // generating new Refresh Token on Expiry on hiting the endpoint
+    try {
+        const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+    
+        if(incomingRefreshToken){
+            throw new ApiError(401,"unauthorized Request")
+        }
+    
+        const decodedToken = jwt.verify( // Verify incoming Refresh-Token 
+            incomingRefreshToken,
+            process.env.REFRESH_TOKEN_SECRET
+        )
+    
+        const user = User.findById(decodedToken?._id) // find user by decodedToken
+    
+        if(!user){
+            throw new ApiError(401,"Invalid refresh Token")
+        }
+    
+        if(incomingRefreshToken !== user?.refreshToken){  // if refresh Token fetched from 'user' and 'incoming from cookies' are not same throw error
+            throw new ApiError(401,"Refresh token is expired or used")
+        }
+    
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+    
+        const {accessToken,new_refreshToken} = await generateAccessAndRefreshToken(user._id)
+    
+        return res
+        .status(200)
+        .cookie("accessToken",accessToken,options)
+        .cookie("refresToken", new_refreshToken,options)
+        .json(
+            new ApiResponse(
+                200,
+                {accessToken, refreshToken: new_refreshToken},
+                "Access Token Refreshed"
+            )
+        )
+    } catch (error) {
+        throw new ApiError(401,error?.message || "Invalid Refresh Token")
+    }
 
+})
 
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 }
