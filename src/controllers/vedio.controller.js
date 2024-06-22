@@ -4,7 +4,7 @@ import {User} from "../models/user.models.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, sortBy = "title", sortType = "ascending", userId } = req.query
@@ -81,25 +81,27 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
     // Validate file existence
     const videoLocalPath = req.files?.videofile?.[0]?.path;
-    const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
 
-    if (!videoLocalPath || !thumbnailLocalPath) {
-        throw new ApiError(400, "Video file and thumbnail are required");
+    console.log("videoLocalPath:", videoLocalPath);
+
+    if (!videoLocalPath) {
+        throw new ApiError(400, "Video file required");
     }
 
     // Upload to Cloudinary
     const videoFile = await uploadOnCloudinary(videoLocalPath);
-    const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
 
-    if (!videoFile || !thumbnail) {
-        throw new ApiError(400, "Error uploading video file and thumbnail");
+    if (!videoFile) {
+        throw new ApiError(400, "Error uploading video file ");
     }
 
+
+    
     // Create video entry
     const video = await Video.create({
         videofile: videoFile.url,
-        thumbnail: thumbnail.url,
         title,
+        thumbnail:null,
         description,
         duration: videoFile.duration,
         owner: req.user?._id // Assuming user ID is stored in req.user

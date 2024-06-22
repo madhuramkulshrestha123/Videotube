@@ -10,15 +10,20 @@ router.route("/getvideos").get(getAllVideos)
 router.route("/publish_video").post(
     upload.fields([
         {
-            name: "videoFile",
+            name: "videofile",
             maxCount: 1,
         },
         {
             name: "thumbnail",
             maxCount: 1,
         },
-        
-    ]),publishAVideo)
+    ]),
+    (req, res, next) => {
+        console.log("Received files in Multer:", req.files);
+        next();
+    },
+    publishAVideo
+);
 
 router.route("/getVideoById").get(getVideoById)
 router.route("/delvideo").delete(deleteVideo)
