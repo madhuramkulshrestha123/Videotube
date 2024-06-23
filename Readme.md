@@ -1,0 +1,45 @@
+
+# VideoTube
+
+## VideoTube Backend API
+
+This is the backend API for a video hosting website similar to YouTube. It's built using Node.js and Express.js, and implements standard practices for user authentication, authorization, and video management.
+
+### Features
+
+* User Management:
+    * User registration and login
+    * JWT-based authentication with access and refresh tokens (using bcrypt for password hashing)
+* Video Management:
+    * Video upload and storage (implementation details depend on your chosen storage solution)
+    * Video retrieval (by user, popularity, etc.)
+* Subscriptions:
+    * Allow users to subscribe to channels
+    * Provide functionalities related to subscriptions (e.g., view subscriptions, see videos from subscribed channels)
+*  (and potentially many more!)
+
+### Technologies
+
+* Node.js
+* Express.js
+* Mongoose (or similar ODM for MongoDB) (not explicitly mentioned, but likely used)
+* JWT (JSON Web Token)
+* bcrypt
+
+### Learning from this Project
+
+This project is designed to be comprehensive and follow best practices, making it a valuable learning resource for anyone interested in building backend APIs for video hosting platforms. You'll gain experience with:
+
+* Building RESTful APIs with Node.js and Express.js
+* User authentication and authorization using JWT and bcrypt
+* Implementing functionalities for video uploads, retrieval, and management
+* Building features like subscriptions and potentially more
+
+### Getting Started
+
+1. Clone this repository.
+2. Install dependencies: `npm install`
+3. Configure environment variables (database connection, etc.) following instructions in a separate `.env` file (not included in this repository for security reasons).
+4. Start the server: `npm start` (or a similar command depending on your setup)
+
+
