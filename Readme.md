@@ -42,7 +42,15 @@ This project is designed to be comprehensive and follow best practices, making i
 3. Configure environment variables (database connection, etc.) following instructions in a separate `.env` file (not included in this repository for security reasons).
 4. Start the server: `npm start` (or a similar command depending on your setup)
 
-### Model
+
+### Model:
 
 ![diagram-export-6-23-2024-6_34_54-PM](https://github.com/madhuramkulshrestha123/Videotube/assets/128170524/eb5c006a-8984-4ff6-ad7a-6660d0e32c18)
 
+
+### Screenshots:
+![Screenshot 2024-06-23 223136](https://github.com/madhuramkulshrestha123/Videotube/assets/128170524/e86b13ad-61de-4500-95e3-5046c63c7dea)
+
+![Screenshot 2024-06-23 223308](https://github.com/madhuramkulshrestha123/Videotube/assets/128170524/6a5dfd3c-f161-4bca-b5c1-8ece006a2fd4)
+
+![Screenshot 2024-06-23 223419](https://github.com/madhuramkulshrestha123/Videotube/assets/128170524/34440853-22d3-4ea1-b119-34068e1ea22b)
