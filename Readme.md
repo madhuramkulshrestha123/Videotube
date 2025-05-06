@@ -7,7 +7,7 @@ This is the backend API for a video hosting website similar to YouTube. It's bui
 
 ### Features
 
-* User Management:
+* User Management :
     * User registration and login
     * JWT-based authentication with access and refresh tokens (using bcrypt for password hashing)
 * Video Management:
